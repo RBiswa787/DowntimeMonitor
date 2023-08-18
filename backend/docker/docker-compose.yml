@@ -1,0 +1,33 @@
+version: '3'
+services:
+  apache:
+    build:
+      context: ./docker/apache
+    ports:
+      - "80:80"
+    depends_on:
+      - mysql
+    volumes:
+      - ./app:/var/www/html
+    networks:
+      - mynetwork
+
+  mysql:
+    build:
+      context: ./docker/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: appdb
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: apppassword
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
+
+volumes:
+  mysql-data:
